@@ -1,0 +1,20 @@
+{
+  "name": "mm2",
+  "version": "0.1.0",
+  "description": "mongo monitoring",
+  "main": "index.js",
+  "scripts": {
+    "mongo": "mongod --config ./mongod.conf",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.5",
+    "node-fetch": "^2.1.2",
+    "ps-tree": "^1.1.0",
+    "rxjs": "^6.1.0",
+    "tail": "^1.2.3"
+  }
+}
