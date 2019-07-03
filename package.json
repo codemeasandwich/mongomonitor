@@ -4,6 +4,7 @@
   "description": "mongo monitoring",
   "main": "index.js",
   "scripts": {
+    "setup": "touch /data/mongod.log && chmod 777 /data/mongod.log",
     "mongo": "mongod --config ./mongod.conf",
     "start": "node index.js"
   },
