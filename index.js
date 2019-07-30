@@ -1,133 +1,62 @@
 var blessed = require('blessed')
   , contrib = require('blessed-contrib')
   , screen  = blessed.screen()
-  , grid    = new contrib.grid({rows: 4, cols: 4, screen: screen});
+  , grid    = new contrib.grid({rows: 8, cols: 8, screen });
 
 const os = require('os');
 
-const MapBuilder = require('./wigits/map')
-      MapBuilder('Servers Location',grid,1, 0, 2, 2)
+const MapBuilder = require('./wigits/map');
+      MapBuilder('Servers Location',grid,2, 0, 3, 3);
 
-const InfoBuilder = require('./wigits/info')
-const LogBuilder  = require('./wigits/log')
 
-/*
-var exec = require('child_process').exec
-var psTree = require('ps-tree');
+const Cluster = require('./wigits/cluster');
+      Cluster('Cluster',grid,2, 3, 2, 3);
+      
+const ClusterLoad = require('./wigits/clusterload');
+      ClusterLoad('Cluster Load',grid,4, 3, 2, 3);
 
-var kill = function (pid, signal, callback) {
-    signal   = signal || 'SIGKILL';
-    callback = callback || function () {};
-    var killTree = true;
-    if(killTree) {
-        psTree(pid, function (err, children) {
-            [pid].concat(
-                children.map(function (p) {
-                    return p.PID;
-                })
-            ).forEach(function (tpid) {
-                try { process.kill(tpid, signal) }
-                catch (ex) { }
-            });
-            callback();
-        });
-    } else {
-        try { process.kill(pid, signal) }
-        catch (ex) { }
-        callback();
-    }
-};
+const InfoBuilder = require('./wigits/info');
+const LogBuilder  = require('./wigits/log');
 
-const mongo_process = exec("npm run mongo", { cwd: __dirname, windowsHide:true })
-
-mongo_process.stdout.on('data', function(data) {
-    console.log('stdout: ' + data);
-});
-mongo_process.stderr.on('data', function(data) {
-    console.log('stdout: ' + data);
-});
-mongo_process.on('close', function(code) {
-    console.log('mongo was closed: ' + code);
-    process.exit(0);
-});
-*/
 const mongoProcessStream = require('./startMongo');
 
 
  const LineBuilder = require('./wigits/io')
-       LineBuilder('IO for the last minute',grid,3, 2, 1, 2)
+       LineBuilder('IO for the last minute',grid,6, 4, 2, 4)
 
-
+let fullScreenLog = false;
 
 // var markdown = grid.set(3, 0, 1, 2,contrib.markdown)
-var inputLineForInfo = InfoBuilder("info",grid,3, 0, 1, 2)
+var inputLineForInfo = InfoBuilder("This server",grid,6, 0, 2, 2)
 
- var table = grid.set(1,3,2,1,contrib.table,
-                         { keys: true
-                         , fg: 'white'
-                         , selectedFg: 'white'
-                         , selectedBg: 'blue'
-                         , interactive: true
-                         , label: 'commands'
-                         , width: '30%'
-                         , height: '30%'
-                         , border: {type: "line", fg: "cyan"}
-                         , columnSpacing: 3 //in chars
-                         , columnWidth: [6,6,40] //in chars
-                       })
+
+
+ const CommandsBuilder = require('./wigits/commands')
+var inputCommands = CommandsBuilder('commands',grid,2,6,4,2)
 
 
 var logFile = require('./read')
 
-const sparkline = grid.set(2, 2, 1, 1,contrib.sparkline,
+//=====================================================
+//============================ 
+//=====================================================
+
+const sparkline = grid.set(6, 2, 2, 2,contrib.sparkline,
       { label: 'Throughput (bits/sec)', tags: true, style: { fg: 'green' }})
-/*
-const cpuSteps = Array(30).fill(0)
 
-//    sparkline.setData(
-//    [ 'CPU', 'RAM', 'DISK'],
-//    [ [10, 20, 30, 20]
-//    , [40, 10, 40, 50]])
-
-
-
-                 // (row, col, rowSpan, colSpan, obj, opts)
-   var gauge = grid.set(1, 2, 1, 1,contrib.gauge,{label: 'CPU', stroke: 'green', fill: 'white'})
-   gauge.setPercent(0)
-*/
-//   var line = grid.set(0, 6, 6, 6, contrib.line, {
-//       style:{
-//         line: "yellow",
-//         text: "green",
-//         baseline: "black"
-//      },
-//      xLabelPadding: 3,
-//      xPadding: 5,
-//      label: 'Stocks'
-//    })
-
-    //var log = grid.set(0, 0, 1, 4,contrib.log,{ fg: "green", selectedFg: "green", label: 'Log file'})
-    const inputLineForLog = LogBuilder("Log file",grid,0, 0, 1, 4)
+    const inputLineForLog = LogBuilder("Log file", grid, 0, 0, 2, 8);
 
     const lines = []
-  /*  const info = {
-      os:process.platform+ " "+os.release() + " " + os.arch(),
-      cpus:os.cpus()[0].model + " - x" + os.cpus().length +" cores"
-    }*/
-    const conns = {
 
-    }
-//let temp = ""
+    const conns = { }
+
+
     logFile.subscribe(line => {
       inputLineForLog(line)
-  //    screen.render()
-  //    return;
+      
       if("CONTROL" === line.component){
-      //  markdown.setMarkdown("A")
         if("initandlisten" === line.context){
-
           inputLineForInfo(line)
-
         }// END "initandlisten" === line.context
       }// END "CONTROL" === line.component
       if("NETWORK" === line.component){
@@ -141,40 +70,23 @@ const cpuSteps = Array(30).fill(0)
         conns[line.context] = line.message.split("run command ").pop().trim()
       }
 
-      const data = Object.keys(conns)
-                         .sort(function (a, b) {
-                              return (+a.replace("conn", "")) - (+b.replace("conn", ""));
-                          }).map(linkName => {
-                            const [db,cmd] = conns[linkName].split(".$cmd ")
-                            return [linkName,db,cmd]
-                          })
-
-      table.setData({ headers: ['link','db', 'comm'], data })
-
-
-    //  screen.render()
-
+       inputCommands(conns)
+                          
     },console.error)
 
-
-  // var map = grid.set(1, 0, 2, 2, contrib.map, {label: 'Servers Location',style:{stroke: "red",shapeColor:"yellow"}})
-
-/*
-   var lineData = {
-      x: ['t1', 't2', 't3', 't4'],
-      y: [5, 1, 7, 5]
-   }
-*/
-//   line.setData([lineData])
-
    screen.key(['escape', 'q', 'C-c'], function(ch, key) {
-    // kill(mongo_process.pid);
-    // return process.exit(0);
     mongoProcessStream.kill();
-    setTimeout(()=>process.exit(0), 500);
-    //process.exit(0);
+    setTimeout(()=>clearInterval(pollSysInfo), 400);
+    setTimeout(()=>process.exit(0), 600);
    });
 
+   screen.key('l', function(ch, key) {
+    fullScreenLog != fullScreenLog;
+   });
+
+    
+//+++++++++++++++++++++++++++++++++++ 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 const NUMBER_OF_CPUS = os.cpus().length;
@@ -184,10 +96,16 @@ const stats = {
   cpu:Array(20).fill(0),
   ram:Array(20).fill(0)
 }
-setInterval(() => {
+
+//=====================================================
+//============================ 
+//=====================================================
+
+
+const pollSysInfo = setInterval(() => {
   // spin the CPU for 500 milliseconds
   var now = Date.now()
-  while (Date.now() - now < 500);
+  while (Date.now() - now < 500); //TODO: WFT?!?!
 
   const newTime = process.hrtime();
   const newUsage = process.cpuUsage();
@@ -229,7 +147,14 @@ setInterval(() => {
 screen.render()
 }, 1000);
 
+    
+//+++++++++++++++++++++++++++++++++++ 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 screen.render()
+    
+//+++++++++++++++++++++++++++++++++++ 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function hrtimeToMS (hrtime) {
   return hrtime[0] * 1000 + hrtime[1] / 1000000

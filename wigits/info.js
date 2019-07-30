@@ -5,8 +5,8 @@ function builder(label,grid,y,x,height, width){
     os:process.platform+ " "+os.release() + " " + os.arch(),
     cpus:os.cpus()[0].model + " - x" + os.cpus().length +" cores"
   }
-  3, 0, 1, 2
-  var markdown = grid.set(y,x,height, width,contrib.markdown)
+  
+  var markdown = grid.set(y,x,height, width,contrib.markdown,{label})
 
   return function inputLine(line){
 
