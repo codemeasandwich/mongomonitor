@@ -1,15 +1,16 @@
 {
-  "name": "mm2",
-  "version": "0.1.0",
+  "name": "mongomonitor",
+  "version": "0.2.0",
   "description": "mongo monitoring",
   "main": "index.js",
   "scripts": {
     "setup": "touch /data/mongod.log && chmod 777 /data/mongod.log",
+    "keyfile" : "openssl rand -base64 756 > ./keyfile && chmod 400 ./keyfile",
     "mongo": "mongod --config ./mongod.conf",
     "start": "node index.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.8.5",
