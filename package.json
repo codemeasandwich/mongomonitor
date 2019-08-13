@@ -7,6 +7,7 @@
     "setup": "touch /data/mongod.log && chmod 777 /data/mongod.log",
     "keyfile" : "openssl rand -base64 756 > ./keyfile && chmod 400 ./keyfile",
     "mongo": "mongod --config ./mongod.conf",
+    "log": "tail -f /data/mongod.log",
     "start": "node index.js"
   },
   "author": "",
