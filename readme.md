@@ -1,12 +1,10 @@
-# mongo monitor
+# [mongomonitor]
 
 **alpha**
 
 A mongo dashboard for your terminal
 
 ![mongomonitor][screenshot]
-
-[screenshot]: https://raw.githubusercontent.com/codemeasandwich/mongomonitor/master/assets/Screenshot.png "mongomonitor logo"
 
 ## to install
 * npm install
@@ -26,3 +24,6 @@ A mongo dashboard for your terminal
 * Basic docmuent hierarchy explorer
 * Display notifications of important database events
 * ... 
+
+[mongomonitor]:https://github.com/codemeasandwich/mongomonitor#mongomonitor
+[screenshot]: https://raw.githubusercontent.com/codemeasandwich/mongomonitor/master/assets/Screenshot.png "mongomonitor logo"
