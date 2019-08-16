@@ -8,7 +8,10 @@ config = {
 };
 
 rs.initiate(config);
+rs.conf();
 rs.status();
 
-// from Mongodb replica sets 
+//rs.add("localhost:27020"); // to add a new server
+
+// from Mongodb replica sets
 // https://youtu.be/3wus5trgi0A
