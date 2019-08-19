@@ -15,6 +15,11 @@ function builder(label,grid,y,x,height, width){
   })
 }
 
+// Types:
+// primary, secondary
+// visible, hidden
+// priority
+
 fetch('https://api.ipdata.co/')
     .then(res => res.json())
     .then(geo=>{

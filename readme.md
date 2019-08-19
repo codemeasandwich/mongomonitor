@@ -23,7 +23,9 @@ A mongo dashboard for your terminal
 * Indicates replication formation
 * Basic docmuent hierarchy explorer
 * Display notifications of important database events
-* ... 
+* Users: there access & create/edit/remove
+* [Queries profiler](https://docs.mongodb.com/manual/reference/database-profiler/)
+* Setup cluster
 
 [mongomonitor]:https://github.com/codemeasandwich/mongomonitor#mongomonitor
 [screenshot]: https://raw.githubusercontent.com/codemeasandwich/mongomonitor/master/assets/Screenshot.png "mongomonitor logo"
