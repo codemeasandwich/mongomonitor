@@ -1,11 +1,11 @@
 {
   "name": "mongomonitor",
-  "version": "0.2.0",
-  "description": "mongo monitoring",
+  "version": "0.3.0",
+  "description": "A mongo dashboard for your terminal",
   "main": "index.js",
   "scripts": {
     "setup": "touch /data/mongod.log && chmod 777 /data/mongod.log",
-    "keyfile" : "openssl rand -base64 756 > ./keyfile && chmod 400 ./keyfile",
+    "keyfile": "openssl rand -base64 756 > ./keyfile && chmod 400 ./keyfile",
     "mongo": "mongod --config ./mongod.conf",
     "log": "tail -f /data/mongod.log",
     "start": "node index.js"
