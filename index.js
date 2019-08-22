@@ -3,6 +3,8 @@ var blessed = require('blessed')
   , screen  = blessed.screen()
   , grid    = new contrib.grid({rows: 8, cols: 8, screen });
 
+const store = require('./store');
+const actions = require('redux-auto').default;
 const os = require('os');
 
 const MapBuilder = require('./wigits/map');
@@ -11,7 +13,7 @@ const MapBuilder = require('./wigits/map');
 
 const Cluster = require('./wigits/cluster');
       Cluster('Cluster',grid,2, 3, 2, 3);
-      
+
 const ClusterLoad = require('./wigits/clusterload');
       ClusterLoad('Cluster Load',grid,4, 3, 2, 3);
 
@@ -38,7 +40,7 @@ var inputCommands = CommandsBuilder('commands',grid,2,6,4,2)
 var logFile = require('./read')
 
 //=====================================================
-//============================ 
+//============================
 //=====================================================
 
 const sparkline = grid.set(6, 2, 2, 2,contrib.sparkline,
@@ -52,8 +54,10 @@ const sparkline = grid.set(6, 2, 2, 2,contrib.sparkline,
 
 
     logFile.subscribe(line => {
-      inputLineForLog(line)
-      
+    //  console.log(actions)
+      actions.log.newline({line:line.raw})
+      //inputLineForLog(line)
+
       if("CONTROL" === line.component){
         if("initandlisten" === line.context){
           inputLineForInfo(line)
@@ -71,7 +75,7 @@ const sparkline = grid.set(6, 2, 2, 2,contrib.sparkline,
       }
 
        inputCommands(conns)
-                          
+
     },console.error)
 
    screen.key(['escape', 'q', 'C-c'], function(ch, key) {
@@ -84,8 +88,8 @@ const sparkline = grid.set(6, 2, 2, 2,contrib.sparkline,
     fullScreenLog != fullScreenLog;
    });
 
-    
-//+++++++++++++++++++++++++++++++++++ 
+
+//+++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -98,7 +102,7 @@ const stats = {
 }
 
 //=====================================================
-//============================ 
+//============================
 //=====================================================
 
 
@@ -147,13 +151,13 @@ const pollSysInfo = setInterval(() => {
 screen.render()
 }, 1000);
 
-    
-//+++++++++++++++++++++++++++++++++++ 
+
+//+++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 screen.render()
-    
-//+++++++++++++++++++++++++++++++++++ 
+
+//+++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function hrtimeToMS (hrtime) {

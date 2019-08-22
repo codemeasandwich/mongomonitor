@@ -17,6 +17,8 @@
     "blessed-contrib": "^4.8.5",
     "node-fetch": "^2.1.2",
     "ps-tree": "^1.1.0",
+    "redux": "^4.0.4",
+    "redux-auto": "^2.1.0",
     "rxjs": "^6.1.0",
     "tail": "^1.2.3"
   }
