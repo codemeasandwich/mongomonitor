@@ -4,6 +4,8 @@
 
 A mongo dashboard for your terminal
 
+ [![Buy me a coffee](https://img.shields.io/badge/buy%20me-a%20coffee-orange.svg)](https://www.buymeacoffee.com/codemeasandwich)
+
 ![mongomonitor][screenshot]
 
 ## to install
